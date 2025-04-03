@@ -42,7 +42,17 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DE5C20C919EE40288EA2CC391F9FCF73 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8A966287504B4803B54A5D815D561A2E }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7303AE5594174F1FA15555DF03EA62BE }}
-
+      
+      - name: Retrieve publish profile for deployment
+        id: publishProfileRetrieval
+        run: | 
+            publishProfiles=$(az webapp deployment list-publishing-profiles \
+              --name "<FUNCTION APP NAME>" \
+              --resource-group "<RESOURCE GROUP NAME>" \
+              --subscription "<SUBSCRIPTION ID>" --xml)
+            echo "::add-mask::$publishProfiles"
+            echo "::set-output name=publishProfiles::$publishProfiles"
+      
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
@@ -50,4 +60,5 @@ jobs:
           app-name: 'sethb-testfuncslots2'
           slot-name: 'staging'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          publish-profile: ${{ steps.publishProfileRetrieval.outputs.publishProfiles }}
           
