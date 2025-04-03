@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "net8inprochttp": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7019",
+      "launchBrowser": false
+    }
+  }
+}
