@@ -45,7 +45,10 @@ jobs:
       
       - name: Retrieve publish profile for deployment
         id: publishProfileRetrieval
-        run: | 
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: | 
             publishProfiles=$(az webapp deployment list-publishing-profiles \
               --name "sethb-testfuncslots2" \
               --resource-group "Sethb-TestApps-RG" \
